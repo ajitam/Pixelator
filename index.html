@@ -1,0 +1,82 @@
+<html>
+<head>
+	<title>13.frog logo</title>
+</head>
+<body>
+
+
+<!-- Include raphaeljs -->
+<script type="text/javascript" src="./raphael.js"></script>
+
+<script type="text/javascript">
+	// Creates canvas 320 × 200 at 10, 50
+	var paper = Raphael(50, 50, 100, 100);
+
+	var element_count = 0;
+	var frog_matrix = [
+		[0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,1,0,0,0,0],
+		[0,0,1,1,1,1,1,0,0],
+		[0,1,0,1,1,1,0,1,0],
+		[0,0,0,1,1,1,0,0,0],
+		[0,1,1,1,1,1,1,1,0],
+		[1,0,1,0,1,0,1,0,1],
+		[0,0,0,1,1,1,0,0,0],
+		[0,0,0,0,0,0,0,0,0]
+	];
+
+	var number_matrix = [
+		[0,1,1,0,1,1,1,0,0],
+		[0,0,0,0,0,0,0,0,0],
+		[0,1,1,0,1,1,1,0,0],
+		[0,0,1,0,0,0,1,0,0],
+		[0,0,1,0,0,1,1,0,0],
+		[0,0,1,0,0,0,1,0,0],
+		[0,0,1,0,1,0,1,0,0],
+		[0,0,1,0,1,1,1,0,1],
+		[0,0,0,0,0,0,0,0,0],
+		[0,0,1,0,1,1,1,0,0]
+	]
+
+	var number_array = [];
+	for(var row = 0; row < number_matrix.length; row++) {
+		// Loop rows
+		y = row * 10;
+
+		for(var col = 0; col < number_matrix[row].length; col++) {
+			x = col * 10;
+			if (number_matrix[row][col] == 1) {
+				number_array.push([x,y]);
+			};
+		}
+	}
+	for(var row = 0; row < frog_matrix.length; row++) {
+		// Loop rows
+		y = row * 10;
+
+		for(var col = 0; col < frog_matrix[row].length; col++) {
+			x = col * 10;
+			if (frog_matrix[row][col] == 1) {
+				var element = paper.rect(x, y, 10, 10);
+				element.attr('fill', '#000');
+				element.attr('stroke', '#fff');
+				element.attr('id', element_count);
+
+				element_count++;
+			};
+		}
+	}
+
+	element.mouseover( function() {
+		paper.forEach(function (el) {
+			console.log(this);
+			el.animate({x: number_array[el.id][0], y: number_array[el.id][1]}, 500);
+		});
+		
+	});
+
+	
+</script>
+</body>
+</html>
