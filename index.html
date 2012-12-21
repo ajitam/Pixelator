@@ -9,6 +9,21 @@
 <script type="text/javascript" src="./raphael.js"></script>
 
 <script type="text/javascript">
+	
+	function randomize ( myArray ) {
+		var i = myArray.length;
+		
+		if ( i == 0 ) return false;
+		
+		while ( --i ) {
+			var j = Math.floor( Math.random() * ( i + 1 ) );
+			var tempi = myArray[i];
+			var tempj = myArray[j];
+			myArray[i] = tempj;
+			myArray[j] = tempi;
+		}
+	}
+
 	// Creates canvas 320 × 200 at 10, 50
 	var paper = Raphael(50, 50, 100, 100);
 
@@ -51,6 +66,9 @@
 			};
 		}
 	}
+
+	randomize(number_array);
+
 	for(var row = 0; row < frog_matrix.length; row++) {
 		// Loop rows
 		y = row * 10;
