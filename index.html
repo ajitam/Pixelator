@@ -3,13 +3,124 @@
 	<title>13.frog logo</title>
 </head>
 <body>
-
+<div id="workspace" style="background: #eee;"></div>
 
 <!-- Include raphaeljs -->
 <script type="text/javascript" src="./raphael.js"></script>
 
 <script type="text/javascript">
-	
+	var pixelator = {
+
+		workspace: null,
+		workspace_width: 0,
+		workspace_height: 0,
+
+		init: function(selector_id, prefs) {
+			// Set default preferences
+			pixelator.element_size = (typeof prefs.size === "undefined") ? 10 : prefs.size;
+			pixelator.element_fill = (typeof prefs.fill === "undefined") ? '#000' : prefs.fill;
+			pixelator.element_border = (typeof prefs.border === "undefined") ? 'none' : prefs.border;
+
+			// Set workspace
+			pixelator.workspace = document.getElementById(selector_id);
+
+		},
+
+		draw: function(matrix) {
+			if (pixelator.workspace == null) {
+				console.log("Please run pixelator.init first");
+				return;
+			}
+
+			pixelator.workspace_width = matrix[0].length * pixelator.element_size;
+			pixelator.workspace_height = matrix.length * pixelator.element_size;
+			
+			pixelator.workspace.style.width = pixelator.workspace_width;
+			pixelator.workspace.style.height = pixelator.workspace_height;
+			
+			// Create canvas
+			var paper = Raphael(pixelator.workspace, pixelator.workspace_width, pixelator.workspace_height);
+			var element_count = 0;
+
+			// Loop rows
+			for(var row = 0; row < matrix.length; row++) {
+				y = row * pixelator.element_size;
+				// Loop columns
+				for(var col = 0; col < matrix[row].length; col++) {
+					x = col * pixelator.element_size;
+					if (matrix[row][col] == 1) {
+						var element = paper.rect(x, y, pixelator.element_size, pixelator.element_size);
+						element.attr('fill', pixelator.element_fill);
+						element.attr('stroke', pixelator.element_border);
+						element.attr('id', element_count);
+
+						element_count++;
+					}
+				}
+			}
+		},
+
+		transform: function(matrix_in, matrix_out) {
+			var matrix_in_count = pixelator.count(matrix_in);
+			var matrix_out_count = pixelator.count(matrix_out);
+
+			
+		}
+	};
+
+	pixelator.init('workspace', {
+		'size'		: 20,
+		'fill'		: '#000',
+		'border'	: 'none'
+	});
+
+	// [.,.,.,.,.,.,.,.,.,.,.]
+	// [.,.,.,.,.,#,.,.,.,.,.]
+	// [.,.,.,#,#,#,#,#,.,.,.]
+	// [.,.,#,.,#,#,#,.,#,.,.]
+	// [.,.,.,.,#,#,#,.,.,.,.]
+	// [.,.,#,#,#,#,#,#,#,.,.]
+	// [.,#,.,#,.,#,.,#,.,#,.]
+	// [.,.,.,.,#,#,#,.,.,.,.]
+	// [.,.,.,.,.,.,.,.,.,.,.]
+
+	var frog_matrix = [
+		[0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,1,0,0,0,0,0],
+		[0,0,0,1,1,1,1,1,0,0,0],
+		[0,0,1,0,1,1,1,0,1,0,0],
+		[0,0,0,0,1,1,1,0,0,0,0],
+		[0,0,1,1,1,1,1,1,1,0,0],
+		[0,1,0,1,0,1,0,1,0,1,0],
+		[0,0,0,0,1,1,1,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0]
+	];
+
+	// [.,.,.,.,.,.,.,.,.,.,.]
+	// [.,#,#,.,#,#,#,.,.,.,.]
+	// [.,.,#,.,.,.,.,#,.,.,.]
+	// [.,.,#,.,.,.,.,#,.,.,.]
+	// [.,.,#,.,#,#,#,.,.,.,.]
+	// [.,.,#,.,.,.,.,#,.,.,.]
+	// [.,.,#,.,.,.,.,#,.,.,.]
+	// [.,.,#,.,#,#,#,.,.,#,.]
+	// [.,.,.,.,.,.,.,.,.,.,.]
+
+	var number_matrix = [
+		[0,0,0,0,0,0,0,0,0,0,0],
+		[0,1,1,0,1,1,1,0,0,0,0],
+		[0,0,1,0,0,0,0,1,0,0,0],
+		[0,0,1,0,0,0,0,1,0,0,0],
+		[0,0,1,0,1,1,1,0,0,0,0],
+		[0,0,1,0,0,0,0,1,0,0,0],
+		[0,0,1,0,0,0,0,1,0,0,0],
+		[0,0,1,0,1,1,1,0,0,1,0],
+		[0,0,0,0,0,0,0,0,0,0,0]
+	];
+
+	pixelator.draw(frog_matrix);
+
+	/*
 	function randomize ( myArray ) {
 		var i = myArray.length;
 		
@@ -93,7 +204,7 @@
 		});
 		
 	});
-
+	*/
 	
 </script>
 </body>
