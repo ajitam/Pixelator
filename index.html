@@ -64,25 +64,135 @@
 			var matrix_in_count = pixelator.count(matrix_in);
 			var matrix_out_count = pixelator.count(matrix_out);
 
+			pixelator.workspace_width = matrix_in[0].length * pixelator.element_size;
+			pixelator.workspace_height = matrix_in.length * pixelator.element_size;
 			
+			pixelator.workspace.style.width = pixelator.workspace_width;
+			pixelator.workspace.style.height = pixelator.workspace_height;
+			
+			// Create canvas
+			pixelator.paper = Raphael(pixelator.workspace, pixelator.workspace_width, pixelator.workspace_height);
+			var element_count = 0;
+
+			var number_array = pixelator.randomize(pixelator.onesArray(matrix_out));
+
+			var extra_element = Math.ceil(matrix_out_count/matrix_in_count);
+			number_array_index = 0;
+
+			// Loop rows
+			for(var row = 0; row < matrix_in.length; row++) {
+				y = row * pixelator.element_size;
+				// Loop columns
+				for(var col = 0; col < matrix_in[row].length; col++) {
+					x = col * pixelator.element_size;
+					if (matrix_in[row][col] == 1) {
+						extra_step = 0;
+
+						while(extra_step < extra_element) {
+							var element = pixelator.paper.rect(x, y, pixelator.element_size, pixelator.element_size);
+							element.attr('fill', pixelator.element_fill);
+							element.attr('stroke', pixelator.element_border);
+							element.attr('id', element_count);
+
+							number_array_index++;
+							if (number_array_index >= number_array.length) {number_array_index = 0;}
+							var coor_in = [x,y];
+							var coor_out = number_array[number_array_index];
+
+							element.data('in', coor_in);
+							element.data('out', coor_out);
+
+
+							element_count++;
+							extra_step++;
+						}
+
+					}
+				}
+			}
+
+			// Set trigger
+			pixelator.workspace.onmouseover = function() {
+				pixelator.reorder('out');
+			};
+
+			pixelator.workspace.onmouseout = function() {
+				pixelator.reorder('in');
+			};
+		},
+
+		reorder: function(action) {
+			pixelator.paper.forEach(function (el) {
+				el.animate({x: el.data(action)[0], y: el.data(action)[1]}, 200, 'easeInOut');
+			});
+		},
+
+		/**
+		 * Generate array with coordinates of ones in matrix
+		 */
+		onesArray: function(matrix) {
+			var number_array = [];
+			for(var row = 0; row < matrix.length; row++) {
+				// Loop rows
+				y = row * pixelator.element_size;
+				for(var col = 0; col < matrix[row].length; col++) {
+					x = col * pixelator.element_size;
+					if (matrix[row][col] == 1) {
+						number_array.push([x,y]);
+					};
+				}
+			}
+			return number_array;
+		},
+
+		/**
+		 * Count ones (1) in matrix
+		 */
+		count: function(matrix) {
+			var count = 0;
+
+			// Loop rows
+			for(var row = 0; row < matrix.length; row++) {
+				// Loop columns
+				for(var col = 0; col < matrix[row].length; col++) {
+					if (matrix[row][col] == 1) {
+						count++;
+					}
+				}
+			}
+
+			return count;
+		},
+
+		randomize: function(array_in) {
+			var i = array_in.length;
+			if ( i == 0 ) return false;
+			while ( --i ) {
+				var j = Math.floor( Math.random() * ( i + 1 ) );
+				var tempi = array_in[i];
+				var tempj = array_in[j];
+				array_in[i] = tempj;
+				array_in[j] = tempi;
+			}
+			return array_in;
 		}
 	};
 
 	pixelator.init('workspace', {
-		'size'		: 20,
+		'size'		: 8,
 		'fill'		: '#000',
 		'border'	: 'none'
 	});
 
-	// [.,.,.,.,.,.,.,.,.,.,.]
-	// [.,.,.,.,.,#,.,.,.,.,.]
-	// [.,.,.,#,#,#,#,#,.,.,.]
-	// [.,.,#,.,#,#,#,.,#,.,.]
-	// [.,.,.,.,#,#,#,.,.,.,.]
-	// [.,.,#,#,#,#,#,#,#,.,.]
-	// [.,#,.,#,.,#,.,#,.,#,.]
-	// [.,.,.,.,#,#,#,.,.,.,.]
-	// [.,.,.,.,.,.,.,.,.,.,.]
+	//	[.,.,.,.,.,.,.,.,.,.,.]
+	//	[.,.,.,.,.,#,.,.,.,.,.]
+	//	[.,.,.,#,#,#,#,#,.,.,.]
+	//	[.,.,#,.,#,#,#,.,#,.,.]
+	//	[.,.,.,.,#,#,#,.,.,.,.]
+	//	[.,.,#,#,#,#,#,#,#,.,.]
+	//	[.,#,.,#,.,#,.,#,.,#,.]
+	//	[.,.,.,.,#,#,#,.,.,.,.]
+	//	[.,.,.,.,.,.,.,.,.,.,.]
 
 	var frog_matrix = [
 		[0,0,0,0,0,0,0,0,0,0,0],
@@ -96,116 +206,31 @@
 		[0,0,0,0,0,0,0,0,0,0,0]
 	];
 
-	// [.,.,.,.,.,.,.,.,.,.,.]
-	// [.,#,#,.,#,#,#,.,.,.,.]
-	// [.,.,#,.,.,.,.,#,.,.,.]
-	// [.,.,#,.,.,.,.,#,.,.,.]
-	// [.,.,#,.,#,#,#,.,.,.,.]
-	// [.,.,#,.,.,.,.,#,.,.,.]
-	// [.,.,#,.,.,.,.,#,.,.,.]
-	// [.,.,#,.,#,#,#,.,.,#,.]
-	// [.,.,.,.,.,.,.,.,.,.,.]
+	//	[.,.,.,.,.,.,.,.,.,.,.]
+	//	[.,#,#,.,#,#,#,.,.,.,.]
+	//	[.,.,#,.,.,.,.,#,.,.,.]
+	//	[.,.,#,.,.,.,.,#,.,.,.]
+	//	[.,.,#,.,.,#,#,.,.,.,.]
+	//	[.,.,#,.,.,.,.,#,.,.,.]
+	//	[.,.,#,.,.,.,.,#,.,.,.]
+	//	[.,.,#,.,#,#,#,.,.,#,.]
+	//	[.,.,.,.,.,.,.,.,.,.,.]
 
 	var number_matrix = [
 		[0,0,0,0,0,0,0,0,0,0,0],
 		[0,1,1,0,1,1,1,0,0,0,0],
 		[0,0,1,0,0,0,0,1,0,0,0],
 		[0,0,1,0,0,0,0,1,0,0,0],
-		[0,0,1,0,1,1,1,0,0,0,0],
+		[0,0,1,0,0,1,1,0,0,0,0],
 		[0,0,1,0,0,0,0,1,0,0,0],
 		[0,0,1,0,0,0,0,1,0,0,0],
 		[0,0,1,0,1,1,1,0,0,1,0],
 		[0,0,0,0,0,0,0,0,0,0,0]
 	];
 
-	pixelator.draw(frog_matrix);
+	//pixelator.draw(frog_matrix);
+	pixelator.transform(frog_matrix, number_matrix);
 
-	/*
-	function randomize ( myArray ) {
-		var i = myArray.length;
-		
-		if ( i == 0 ) return false;
-		
-		while ( --i ) {
-			var j = Math.floor( Math.random() * ( i + 1 ) );
-			var tempi = myArray[i];
-			var tempj = myArray[j];
-			myArray[i] = tempj;
-			myArray[j] = tempi;
-		}
-	}
-
-	// Creates canvas 320 × 200 at 10, 50
-	var paper = Raphael(50, 50, 100, 100);
-
-	var element_count = 0;
-	var frog_matrix = [
-		[0,0,0,0,0,0,0,0,0],
-		[0,0,0,0,0,0,0,0,0],
-		[0,0,0,0,1,0,0,0,0],
-		[0,0,1,1,1,1,1,0,0],
-		[0,1,0,1,1,1,0,1,0],
-		[0,0,0,1,1,1,0,0,0],
-		[0,1,1,1,1,1,1,1,0],
-		[1,0,1,0,1,0,1,0,1],
-		[0,0,0,1,1,1,0,0,0],
-		[0,0,0,0,0,0,0,0,0]
-	];
-
-	var number_matrix = [
-		[0,1,1,0,1,1,1,0,0],
-		[0,0,0,0,0,0,0,0,0],
-		[0,1,1,0,1,1,1,0,0],
-		[0,0,1,0,0,0,1,0,0],
-		[0,0,1,0,0,1,1,0,0],
-		[0,0,1,0,0,0,1,0,0],
-		[0,0,1,0,1,0,1,0,0],
-		[0,0,1,0,1,1,1,0,1],
-		[0,0,0,0,0,0,0,0,0],
-		[0,0,1,0,1,1,1,0,0]
-	]
-
-	var number_array = [];
-	for(var row = 0; row < number_matrix.length; row++) {
-		// Loop rows
-		y = row * 10;
-
-		for(var col = 0; col < number_matrix[row].length; col++) {
-			x = col * 10;
-			if (number_matrix[row][col] == 1) {
-				number_array.push([x,y]);
-			};
-		}
-	}
-
-	randomize(number_array);
-
-	for(var row = 0; row < frog_matrix.length; row++) {
-		// Loop rows
-		y = row * 10;
-
-		for(var col = 0; col < frog_matrix[row].length; col++) {
-			x = col * 10;
-			if (frog_matrix[row][col] == 1) {
-				var element = paper.rect(x, y, 10, 10);
-				element.attr('fill', '#000');
-				element.attr('stroke', '#fff');
-				element.attr('id', element_count);
-
-				element_count++;
-			};
-		}
-	}
-
-	element.mouseover( function() {
-		paper.forEach(function (el) {
-			console.log(this);
-			el.animate({x: number_array[el.id][0], y: number_array[el.id][1]}, 500);
-		});
-		
-	});
-	*/
-	
 </script>
 </body>
 </html>
