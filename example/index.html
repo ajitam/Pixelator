@@ -1,0 +1,95 @@
+<html>
+<head>
+	<title>Example file</title>
+</head>
+<body>
+<h1>Pixelator example</h1>
+<h2>Draw example</h2>
+<pre>
+pixelator.init('workspace-draw', {
+	'size'		: 20,
+	'fill'		: 'green',
+	'border'	: 'none'
+});
+pixelator.draw(frog_matrix);
+</pre>
+<div id="workspace-draw"></div>
+
+<h2>Switch example</h2>
+<pre>
+pixelator.init('workspace-switch', {
+	'size'		: 10,
+	'fill'		: '#000',
+	'border'	: '#fff'
+});
+pixelator.transform(frog_matrix, number_matrix);
+</pre>
+<div id="workspace-switch"></div>
+
+<!-- Include raphaeljs -->
+<script type="text/javascript" src="../src/raphael.js"></script>
+
+<script type="text/javascript" src="../src/pixelator.js"></script>
+<script type="text/javascript">
+
+	//	[.,.,.,.,.,.,.,.,.,.,.]
+	//	[.,.,.,.,.,#,.,.,.,.,.]
+	//	[.,.,.,#,#,#,#,#,.,.,.]
+	//	[.,.,#,.,#,#,#,.,#,.,.]
+	//	[.,.,.,.,#,#,#,.,.,.,.]
+	//	[.,.,#,#,#,#,#,#,#,.,.]
+	//	[.,#,.,#,.,#,.,#,.,#,.]
+	//	[.,.,.,.,#,#,#,.,.,.,.]
+	//	[.,.,.,.,.,.,.,.,.,.,.]
+
+	var frog_matrix = [
+		[0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,1,0,0,0,0,0],
+		[0,0,0,1,1,1,1,1,0,0,0],
+		[0,0,1,0,1,1,1,0,1,0,0],
+		[0,0,0,0,1,1,1,0,0,0,0],
+		[0,0,1,1,1,1,1,1,1,0,0],
+		[0,1,0,1,0,1,0,1,0,1,0],
+		[0,0,0,0,1,1,1,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0]
+	];
+
+	//	[.,.,.,.,.,.,.,.,.,.,.]
+	//	[.,#,#,.,#,#,#,.,.,.,.]
+	//	[.,.,#,.,.,.,.,#,.,.,.]
+	//	[.,.,#,.,.,.,.,#,.,.,.]
+	//	[.,.,#,.,.,#,#,.,.,.,.]
+	//	[.,.,#,.,.,.,.,#,.,.,.]
+	//	[.,.,#,.,.,.,.,#,.,.,.]
+	//	[.,.,#,.,#,#,#,.,.,#,.]
+	//	[.,.,.,.,.,.,.,.,.,.,.]
+
+	var number_matrix = [
+		[0,0,0,0,0,0,0,0,0,0,0],
+		[0,1,1,0,1,1,1,0,0,0,0],
+		[0,0,1,0,0,0,0,1,0,0,0],
+		[0,0,1,0,0,0,0,1,0,0,0],
+		[0,0,1,0,0,1,1,0,0,0,0],
+		[0,0,1,0,0,0,0,1,0,0,0],
+		[0,0,1,0,0,0,0,1,0,0,0],
+		[0,0,1,0,1,1,1,0,0,1,0],
+		[0,0,0,0,0,0,0,0,0,0,0]
+	];
+	
+	pixelator.init('workspace-draw', {
+		'size'		: 20,
+		'fill'		: 'green',
+		'border'	: 'none'
+	});
+	pixelator.draw(frog_matrix);
+	
+	pixelator.init('workspace-switch', {
+		'size'		: 10,
+		'fill'		: '#000',
+		'border'	: '#fff'
+	});
+	pixelator.transform(frog_matrix, number_matrix);
+
+</script>
+</body>
+</html>
