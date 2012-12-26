@@ -1,5 +1,5 @@
 #Pixelator
-Javascript
+Draw and manipulate pixel simple image.
 
 ##Requirements
 * **raphael.js** [∞](http://raphaeljs.com/)
