@@ -43,9 +43,9 @@ var pixelator = {
 		// Get and set workspace dimensions
 		pixelator.workspace_width = matrix[0].length * pixelator.element_size;
 		pixelator.workspace_height = matrix.length * pixelator.element_size;
-		
-		pixelator.workspace.style.width = pixelator.workspace_width;
-		pixelator.workspace.style.height = pixelator.workspace_height;
+
+		pixelator.workspace.style.width = pixelator.workspace_width+"px";
+		pixelator.workspace.style.height = pixelator.workspace_height+"px";
 		
 		// Create canvas
 		var paper = Raphael(pixelator.workspace, pixelator.workspace_width, pixelator.workspace_height);
@@ -90,9 +90,9 @@ var pixelator = {
 		pixelator.workspace_width = matrix_in[0].length * pixelator.element_size;
 		pixelator.workspace_height = matrix_in.length * pixelator.element_size;
 		
-		pixelator.workspace.style.width = pixelator.workspace_width;
-		pixelator.workspace.style.height = pixelator.workspace_height;
-		
+		pixelator.workspace.style.width = pixelator.workspace_width+"px";
+		pixelator.workspace.style.height = pixelator.workspace_height+"px";
+
 		// Create canvas
 		pixelator.paper = Raphael(pixelator.workspace, pixelator.workspace_width, pixelator.workspace_height);
 		var element_count = 0;
